@@ -3,7 +3,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{ICPCnotebook}[2022/05/15 v0.1 Template class of Tifa's ICPC Notebook]
 
-\LoadClass[11pt]{report}
+\LoadClass[10pt]{report}
 
 \RequirePackage[centering,scale=0.8]{geometry}
 \RequirePackage{algorithm}
@@ -14,33 +14,26 @@
 \RequirePackage{amsthm}
 \RequirePackage{fancyhdr}
 \RequirePackage{xcolor}
-\RequirePackage[colorlinks=false,
-    linkbordercolor=white,
-    citebordercolor=white,
-    filebordercolor=white,
-    urlbordercolor=white]{hyperref}
+\RequirePackage{hyperref}
 \RequirePackage{multicol}
 \RequirePackage{listings}
 \RequirePackage{pdflscape}
 \RequirePackage{tikz}
 \RequirePackage{tocloft}
 
-\pagestyle{fancy}
-
-\RequirePackage{fontspec}
-\setromanfont{Times New Roman}
-\setsansfont{Arial}
-\setmonofont{Courier New}
+\RequirePackage{beton}
+\RequirePackage{euler}
+\RequirePackage[OT1]{fontenc}
 
 \lstdefinestyle{common}{
     belowcaptionskip=1\baselineskip,
     breaklines=true,
     xleftmargin=\parindent,
-    showstringspaces=false,
+    showstringspaces=true,
     numbers=left,
-    numberstyle=\ttfamily\footnotesize,
+    numberstyle=\ttfamily\small,
     stepnumber=1,
-    basicstyle=\ttfamily\footnotesize,
+    basicstyle=\ttfamily\small,
 }
 \lstdefinestyle{cpp}{
     style=common,
