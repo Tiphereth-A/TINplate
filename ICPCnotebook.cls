@@ -3,7 +3,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{ICPCnotebook}[2022/05/15 v0.1 Template class of Tifa's ICPC Notebook]
 
-\LoadClass[a4paper,10pt]{report}
+\LoadClass[10pt]{report}
 
 \RequirePackage{algorithm}
 \RequirePackage{algpseudocode}
@@ -12,7 +12,7 @@
 \RequirePackage{amssymb}
 \RequirePackage{amsthm}
 \RequirePackage{fancyhdr}
-\RequirePackage[left=0.4in,right=0.4in,top=0.7in,bottom=0.4in]{geometry}
+\RequirePackage[centering,scale=0.8]{geometry}
 \RequirePackage{hyperref}
 \RequirePackage{multicol}
 \RequirePackage{listings}
