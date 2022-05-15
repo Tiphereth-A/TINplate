@@ -46,7 +46,8 @@ notebook:
   # Chapters config, the content will be generated in the order of this field
   chapters:
     # Should be formed in: ${chapter_key}: ${title}
-    # All the chapter is titled as ${title}, and all resources for the following sections of each chapters should be placed in these folders:
+    # All the chapter is titled as ${title},
+    # and all resources for the following sections of each chapters should be placed in these folders:
     # - code: ${src_dir}/${notebook_code_dir}/${chapter_key}
     # - documentation: ${src_dir}/${notebook_doc_dir}/${chapter_key}
     # - test code: ${test_dir}/${chapter_key}
