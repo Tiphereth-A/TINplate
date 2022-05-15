@@ -1,0 +1,42 @@
+src_dir: src
+notebook_code_dir: code
+notebook_doc_dir: doc
+cheatsheet_dir: cheatsheet
+test_dir: test
+notebook_file: notebook
+enable_test: false
+generate_test_in_notebook: false
+notebook:
+  chapters:
+    example: Example
+  sections:
+    example:
+    - helloworld: Hello
+      code_ext: cpp
+      test_ext: cpp
+cheatsheets:
+  example: Euler formula
+  example2: A sequence
+default_code_style: common
+code_styles:
+  C: cpp
+  cc: cpp
+  cp: cpp
+  cpp: cpp
+  CPP: cpp
+  c++: cpp
+  cxx: cpp
+  H: cpp
+  hh: cpp
+  hp: cpp
+  h++: cpp
+  hpp: cpp
+  HPP: cpp
+  hxx: cpp
+  tex: tex
+formatting_commands:
+  cpp:
+  - clang-format
+  - -style=file
+  - -i
+  - ${filename}

@@ -1,0 +1,23 @@
+%-*- coding: utf-8 -*-
+
+\documentclass{ICPCnotebook}
+%\usepackage[UTF8]{ctex}
+
+\title{\vspace{-4ex}\Large{ICPC Notebook}}
+\author{Tifa}
+\date{\today}
+\bibliographystyle{plain}
+
+\begin{document}
+    \maketitle
+    \pagenumbering{roman}
+    \tableofcontents
+    \newpage
+    \pagenumbering{arabic}
+
+    \input{_gen/contents_notebook.tex}
+    \newpage
+    \input{_gen/contents_cheatsheet.tex}
+    ~\nocite{*}
+    \bibliography{notebook}
+\end{document}
