@@ -44,7 +44,7 @@ def cli(level: str):
 
 @cli.command('clean')
 def _clean():
-    """clean files"""
+    """Clean files"""
 
     @withlog
     def clean(logger: logging.Logger):
@@ -57,7 +57,7 @@ def _clean():
 
 @cli.command('gen-nb')
 def _gen_nbc():
-    """generate notebook contents"""
+    """Generate notebook contents"""
 
     @withlog
     def generate_notebook_contents(logger: logging.Logger):
@@ -68,8 +68,8 @@ def _gen_nbc():
                                                           CONFIG.get_doc_dir()),
                                        logger)
             logger.info(rf"{len(chapters)} chapter(s) found")
-            logger.debug('which are:\n\t' + '\n\t'.join(chapters))
-            logger.debug('will include in listed order')
+            logger.debug('Which are:\n\t' + '\n\t'.join(chapters))
+            logger.debug('Will include in listed order')
 
             for chapter in chapters:
                 f.writelines(latex_chapter(NameLaTeX(CONFIG.get_chapter_name(chapter))))
@@ -77,7 +77,7 @@ def _gen_nbc():
                 sections: list[Section] = CONFIG.get_sections_by_chapter(chapter)
                 logger.info(f"{len(sections)} section(s) found in config")
 
-                logger.debug(f"getting section from existing files")
+                logger.debug(f"Getting section from existing files")
                 _sections_generated: list[Section] = []
                 _partitioned_code_filename = load_from(os.path.join(CONFIG.get_code_dir(), chapter))
                 _partitioned_doc_filename = load_from(os.path.join(CONFIG.get_doc_dir(), chapter))
@@ -88,7 +88,7 @@ def _gen_nbc():
                         try:
                             _sections_generated.append(Section(chapter, k, k, __dict.pop(k), v))
                         except KeyError as e:
-                            logger.error(f"test file '{k}.{v}' found, while code file is not")
+                            logger.error(f"Test file '{k}.{v}' found, while code file is not")
                             raise e
                 __null_ext_name: str = f"{random.randint(0, 114514)}.null"
                 for k, v in _partitioned_doc_filename:
@@ -117,13 +117,13 @@ def _gen_nbc():
         filename_in_dir: list[str] = scandir_merge_flit(lambda x: x.is_file(), dir_name)
         kwargs.get('logger').info(rf"{len(filename_in_dir)} file(s) found")
         if len(filename_in_dir):
-            kwargs.get('logger').debug('which are:\n\t' + '\n\t'.join(filename_in_dir))
+            kwargs.get('logger').debug('Which are:\n\t' + '\n\t'.join(filename_in_dir))
 
         _partitioned_filename: list[tuple[str, str]] = [parse_filename(filename) for filename in filename_in_dir]
         if len(set([k for k, v in _partitioned_filename])) != len(_partitioned_filename):
-            kwargs.get('logger').error(f'file with duplicate name found in dir: {dir_name}')
+            kwargs.get('logger').error(f'File with duplicate name found in dir: {dir_name}')
             kwargs.get('logger').info(
-                'each filenames in the same folder should not be the same after removing the ext names')
+                'Each filenames in the same folder should not be the same after removing the ext names')
             raise FileExistsError()
 
         return _partitioned_filename
@@ -133,7 +133,7 @@ def _gen_nbc():
 
 @cli.command('gen-cs')
 def _gen_csc():
-    """generate cheatsheet contents"""
+    """Generate cheatsheet contents"""
 
     @withlog
     def generate_cheatsheet_contents(logger: logging.Logger):
@@ -144,8 +144,8 @@ def _gen_csc():
                 get_full_filenames([CONFIG.get_cheatsheet_dir()], ['tex']),
                 logger)
             logger.info(rf"{len(files)} file(s) found:")
-            logger.debug('which are:\n\t' + '\n\t'.join(files))
-            logger.debug('will include in listed order')
+            logger.debug('Which are:\n\t' + '\n\t'.join(files))
+            logger.debug('Will include in listed order')
 
             f.writelines(latex_chapter(NameLaTeX('Cheatsheet')))
             for file in files:
@@ -160,22 +160,22 @@ def _gen_csc():
 
 
 @cli.command('run')
-@click.option('--no-fmt', is_flag=True, help='do not reformat codes before compile')
-@click.option('--no-gen', is_flag=True, help='do not generate content before compile')
-@click.option('--clean', is_flag=True, help='clean files after compile')
-def _compile(no_fmt: bool, no_gen: bool, clean: bool):
-    """compile notebook"""
+@click.option('--no-fmt', is_flag=True, help='Do not reformat codes before compile')
+@click.option('--no-gen', is_flag=True, help='Do not generate content before compile')
+@click.option('--no-clean', is_flag=True, help='Do not clean files after compile')
+def _compile(no_fmt: bool, no_gen: bool, no_clean: bool):
+    """Compile notebook"""
 
     @withlog
-    def compile_all(_no_fmt: bool, _no_gen: bool, _clean: bool, **kwargs):
+    def compile_all(_no_fmt: bool, _no_gen: bool, _no_clean: bool, **kwargs):
         cnt: int = 0
         for procedure in LATEX_COMPILE_COMMAND_GROUP:
             now_proc: list[str] = procedure(CONFIG.get_notebook_file())
             cnt += 1
-            kwargs.get('logger').info(f'step {cnt} / {len(LATEX_COMPILE_COMMAND_GROUP)}' + '\n' + '-' * 80)
+            kwargs.get('logger').info(f'Step {cnt} / {len(LATEX_COMPILE_COMMAND_GROUP)}' + '\n' + '-' * 80)
             subprocess.run(now_proc, encoding='utf8', check=True)
 
-        kwargs.get('logger').info('finished')
+        kwargs.get('logger').info('Finished')
 
     if not no_fmt:
         for code_style in CONFIG.get_all_code_styles():
@@ -185,16 +185,16 @@ def _compile(no_fmt: bool, no_gen: bool, clean: bool):
         _gen_nbc.callback()
         _gen_csc.callback()
 
-    compile_all(no_fmt, no_gen, clean)
+    compile_all(no_fmt, no_gen, no_clean)
 
-    if clean:
+    if not no_clean:
         _clean.callback()
 
 
 @cli.command('fmt')
-@click.option('-t', '--code-type', help='code type, default: cpp', default='cpp')
+@click.option('-t', '--code-type', help='Code type, default: cpp', default='cpp')
 def _format(code_type: str):
-    """reformat all codes"""
+    """Reformat all codes"""
 
     @withlog
     def reformat_all_codes(_code_type: str, **kwargs):
@@ -211,16 +211,16 @@ def _format(code_type: str):
 
 
 @cli.command('new')
-@click.option('-c', '--chapter-name', type=str, prompt='Chapter name', help='chapter name (key)')
-@click.option('-f', '--file-name', type=str, prompt='File name (without ext name)', help='file name to be added')
-@click.option('-s', '--section-title', type=str, prompt='Section title', help='section title in notebook')
-@click.option('-e', '--code-ext-name', type=str, prompt='Ext name of code file', help='ext name of code file',
+@click.option('-c', '--chapter-name', type=str, prompt='Chapter name', help='Chapter name (key)')
+@click.option('-f', '--file-name', type=str, prompt='File name (without ext name)', help='File name to be added')
+@click.option('-s', '--section-title', type=str, prompt='Section title', help='Section title in notebook')
+@click.option('-e', '--code-ext-name', type=str, prompt='Ext name of code file', help='Ext name of code file',
               default='hpp')
-@click.option('-t', '--test-ext-name', type=str, prompt='Ext name of test file', help='ext name of test file',
+@click.option('-t', '--test-ext-name', type=str, prompt='Ext name of test file', help='Ext name of test file',
               default='cpp')
 def _new_note(chapter_name: str, file_name: str, section_title: str, code_ext_name: str,
               test_ext_name: str):
-    """add new note"""
+    """Add new note"""
 
     @withlog
     def add_new_note(_chapter_name: str, _file_name: str, _section_title: str,
@@ -228,15 +228,15 @@ def _new_note(chapter_name: str, file_name: str, section_title: str, code_ext_na
         section: Section = Section(_chapter_name, _file_name, _section_title, _code_ext_name, _test_ext_name)
 
         section.open(CONFIG.get_code_dir(), CONFIG.get_doc_dir(), CONFIG.get_test_dir(), 'x')
-        logging.info('created')
+        logging.info('Created')
 
         _code, _doc, _test = section.get_filenames(CONFIG.get_code_dir(), CONFIG.get_doc_dir(), CONFIG.get_test_dir())
-        logging.info(f"code: {os.path.join(os.curdir, _code)}")
-        logging.info(f"doc: {os.path.join(os.curdir, _doc)}")
-        logging.info(f"test: {os.path.join(os.curdir, _test)}")
+        logging.info(f"Code: {os.path.join(os.curdir, _code)}")
+        logging.info(f"Doc: {os.path.join(os.curdir, _doc)}")
+        logging.info(f"Test: {os.path.join(os.curdir, _test)}")
 
         CONFIG.append_section(section)
-        logging.info('config updated')
+        logging.info('Config updated')
 
     add_new_note(chapter_name, file_name, section_title, code_ext_name, test_ext_name)
 
