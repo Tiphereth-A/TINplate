@@ -44,8 +44,8 @@ def bibtex(file: str, **kwargs) -> list:
 
 @withlog
 def latexmk(file: str, **kwargs) -> list:
-    return ['latexmk', '-xelatex', '-file-line-error', '-halt-on-error', '-interaction=nonstopmode', '-synctex=1',
-            file + '.tex']
+    return ['latexmk', '-cd', '-xelatex', '-file-line-error', '-halt-on-error', '-interaction=nonstopmode',
+            '-synctex=1', file + '.tex']
 
 
 LATEX_COMPILE_COMMAND_GROUP: list = [latexmk]
