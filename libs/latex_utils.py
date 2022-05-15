@@ -42,7 +42,13 @@ def bibtex(file: str, **kwargs) -> list:
     return ['bibtex', file]
 
 
-LATEX_COMPILE_COMMAND_GROUP: list = [xelatex, bibtex, xelatex, xelatex]
+@withlog
+def latexmk(file: str, **kwargs) -> list:
+    return ['latexmk', '-xelatex', '-file-line-error', '-halt-on-error', '-interaction=nonstopmode', '-synctex=1',
+            file + '.tex']
+
+
+LATEX_COMPILE_COMMAND_GROUP: list = [latexmk]
 
 
 def __latex_command_(command: str, *args) -> str:
