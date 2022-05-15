@@ -62,7 +62,7 @@ def latex_input(path: PathLaTeX, **kwargs) -> list[str]:
 
 
 @withlog
-def latex_label(prefix: str, name: Union[PathLaTeX, NameLaTeX], **kwargs) -> list[str]:
+def latex_label(prefix: str, name: TextLaTeXBase, **kwargs) -> list[str]:
     return [__latex_command_('label', f"{prefix}:{name.get_label_name()}")]
 
 
