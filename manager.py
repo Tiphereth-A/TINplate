@@ -172,7 +172,7 @@ def _compile(no_fmt: bool, no_gen: bool, clean: bool):
         for procedure in LATEX_COMPILE_COMMAND_GROUP:
             now_proc: list[str] = procedure(CONFIG.get_notebook_file())
             cnt += 1
-            kwargs.get('logger').info(f'step {cnt} / {len(LATEX_COMPILE_COMMAND_GROUP)}' + '\n' + '-' * 120)
+            kwargs.get('logger').info(f'step {cnt} / {len(LATEX_COMPILE_COMMAND_GROUP)}' + '\n' + '-' * 80)
             subprocess.run(now_proc, encoding='utf8', check=True)
 
         kwargs.get('logger').info('finished')

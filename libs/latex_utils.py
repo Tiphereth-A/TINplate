@@ -41,7 +41,7 @@ def xelatex(file: str, **kwargs) -> list:
 
 @withlog
 def bibtex(file: str, **kwargs) -> list:
-    return ['bibtex', file + '.bib']
+    return ['bibtex', file]
 
 
 LATEX_COMPILE_COMMAND_GROUP: list = [xelatex, bibtex, xelatex, xelatex]
