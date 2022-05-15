@@ -16,9 +16,15 @@
 1. Run `python -m pip install -r requirements.txt` to install requirements
 1. Run `python manager.py run` to generate all the contents and compile notebook.tex
 
-## Configure
+### Full usage
 
-```yaml config.yml
+Run `python manager.py --help` to see all the commands.
+
+## Configuration
+
+All the configuration is in `config.yml`
+
+```yaml
 # The parent folder of `notebook_code_dir`, `notebook_doc_dir` and `cheatsheet_dir`
 src_dir: src
 # The folder contains all the codes which will be listed
@@ -51,25 +57,25 @@ notebook:
     # - code: ${src_dir}/${notebook_code_dir}/${chapter_key}
     # - documentation: ${src_dir}/${notebook_doc_dir}/${chapter_key}
     # - test code: ${test_dir}/${chapter_key}
-    
+
     example: Example
-    
+
   # Section config
   sections:
     # Config of sections following the chapter ${chapter_key}
     example:
-    # Should be an array, the elements of which should be formed in:
-    #    ${section_key}: ${title}
-    #    code_ext: ${extension_name_of_code}
-    #    test_ext: ${extension_name_of_test_code}
-    # The relavent files should be in:
-    # - code: ${src_dir}/${notebook_code_dir}/${chapter_key}/${section_key}.${extension_name_of_code}
-    # - documentation: ${src_dir}/${notebook_doc_dir}/${chapter_key}/${section_key}.tex
-    # - test code: ${test_dir}/${chapter_key}/${section_key}.${extension_name_of_test_code}
+      # Should be an array, the elements of which should be formed in:
+      #    ${section_key}: ${title}
+      #    code_ext: ${extension_name_of_code}
+      #    test_ext: ${extension_name_of_test_code}
+      # The relavent files should be in:
+      # - code: ${src_dir}/${notebook_code_dir}/${chapter_key}/${section_key}.${extension_name_of_code}
+      # - documentation: ${src_dir}/${notebook_doc_dir}/${chapter_key}/${section_key}.tex
+      # - test code: ${test_dir}/${chapter_key}/${section_key}.${extension_name_of_test_code}
 
-    - helloworld: Hello
-      code_ext: hpp
-      test_ext: cpp
+      - helloworld: Hello
+        code_ext: hpp
+        test_ext: cpp
 
 # Cheatsheet config
 cheatsheets:
@@ -100,8 +106,8 @@ code_styles:
 # Reformatting command config, ${filename} is the name of file that will be reformetted
 formatting_commands:
   cpp:
-  - clang-format
-  - -style=file
-  - -i
-  - ${filename}
+    - clang-format
+    - -style=file
+    - -i
+    - ${filename}
 ```
