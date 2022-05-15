@@ -12,4 +12,4 @@
    - [ClangFormat](https://clang.llvm.org/docs/ClangFormat.html)
 1. Clone this repo and then open it
 1. Run `pip install -r requirements.txt` to install requirements
-1. Run `python .\manager.py run` to get notebook PDF
+1. Run `python manager.py run` to get notebook PDF
