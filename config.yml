@@ -8,15 +8,15 @@ enable_test: false
 generate_test_in_notebook: false
 notebook:
   chapters:
-    example: Chapter name example
+    example: Example
   sections:
     example:
-    - helloworld: Section name example
+    - helloworld: Hello
       code_ext: hpp
       test_ext: cpp
 cheatsheets:
-  example: CS example
-  example2: CS example2
+  example: Euler formula
+  example2: A sequence
 default_code_style: common
 code_styles:
   C: cpp
