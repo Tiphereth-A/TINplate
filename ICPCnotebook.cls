@@ -3,8 +3,9 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{ICPCnotebook}[2022/05/15 v0.1 Template class of Tifa's ICPC Notebook]
 
-\LoadClass[10pt]{report}
+\LoadClass[11pt]{report}
 
+\RequirePackage[centering,scale=0.8]{geometry}
 \RequirePackage{algorithm}
 \RequirePackage{algpseudocode}
 \RequirePackage{amsfonts}
@@ -12,21 +13,34 @@
 \RequirePackage{amssymb}
 \RequirePackage{amsthm}
 \RequirePackage{fancyhdr}
-\RequirePackage[centering,scale=0.8]{geometry}
-\RequirePackage{hyperref}
+\RequirePackage{xcolor}
+\RequirePackage[colorlinks=false,
+    linkbordercolor=white,
+    citebordercolor=white,
+    filebordercolor=white,
+    urlbordercolor=white]{hyperref}
 \RequirePackage{multicol}
 \RequirePackage{listings}
 \RequirePackage{pdflscape}
 \RequirePackage{tikz}
 \RequirePackage{tocloft}
-\RequirePackage{xcolor}
+
+\pagestyle{fancy}
+
+\RequirePackage{fontspec}
+\setromanfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
 
 \lstdefinestyle{common}{
     belowcaptionskip=1\baselineskip,
     breaklines=true,
     xleftmargin=\parindent,
     showstringspaces=false,
-    basicstyle=\fontsize{5.5}{6}\ttfamily,
+    numbers=left,
+    numberstyle=\ttfamily\footnotesize,
+    stepnumber=1,
+    basicstyle=\ttfamily\footnotesize,
 }
 \lstdefinestyle{cpp}{
     style=common,

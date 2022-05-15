@@ -4,6 +4,7 @@ from libs.decorator import withlog
 class TextLaTeXBase:
     def __init__(self, s: str):
         self._str: str = s
+        self._str.removesuffix('\n')
 
     def get(self) -> str:
         return self._str
@@ -82,6 +83,10 @@ def latex_section(name: NameLaTeX, **kwargs) -> list[str]:
 
 @withlog
 def latex_listing_code(path: PathLaTeX, code_style: str, **kwargs) -> list[str]:
-    return [__latex_command_('lstset', f"style={code_style}"),
-            __latex_command_with_option_('lstinputlisting', f"label={{lst:{path.get_label_name()}}}", path.get()),
+    return [__latex_command_('vspace', '0.3cm'),
+            __latex_command_('lstset', f"style={code_style}"),
+            __latex_command_('fbox',
+                             __latex_command_with_option_('lstinputlisting', f"label={{lst:{path.get_label_name()}}}",
+                                                          path.get()).removesuffix('\n')),
+            __latex_command_('vspace', '0.3cm'),
             '\n']
