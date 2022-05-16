@@ -159,7 +159,7 @@ class Config:
         return set(self._get_code_styles_raw().values())
 
     @withlog
-    def get_all_code_types(self, **kwargs) -> set[str]:
+    def get_all_code_ext_names(self, **kwargs) -> set[str]:
         return set(self._get_code_styles_raw().keys())
 
     @withlog

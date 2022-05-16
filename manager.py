@@ -112,7 +112,7 @@ def _gen_nbc():
 
     @withlog
     def load_from(dir_name: str, **kwargs) -> list[tuple[str, str]]:
-        filename_in_dir: list[str] = scandir_file_merge(CONFIG.get_all_code_types(), dir_name)
+        filename_in_dir: list[str] = scandir_file_merge(CONFIG.get_all_code_ext_names(), dir_name)
         kwargs.get('logger').info(rf"{len(filename_in_dir)} file(s) found")
         if len(filename_in_dir):
             kwargs.get('logger').debug('Which are:\n\t' + '\n\t'.join(filename_in_dir))
@@ -137,10 +137,9 @@ def _gen_csc():
     def generate_cheatsheet_contents(logger: logging.Logger):
         with open(CONTENTS_CS, 'w', encoding='utf8') as f:
             f.write('%-*- coding: utf-8 -*-\n')
-            files = file_preprocess(
-                [os.path.join(CONFIG.get_cheatsheet_dir(), f'{f}.tex') for f in CONFIG.get_cheatsheets()],
-                get_full_filenames([CONFIG.get_cheatsheet_dir()], ['tex']),
-                logger)
+            files: list[str] = file_preprocess([f'{f}.tex' for f in CONFIG.get_cheatsheets()],
+                                               scandir_file_merge(['tex'], CONFIG.get_cheatsheet_dir()), logger)
+            files = [os.path.join(CONFIG.get_cheatsheet_dir(), item) for item in files]
             logger.info(rf"{len(files)} file(s) found:")
             logger.debug('Which are:\n\t' + '\n\t'.join(files))
             logger.debug('Will include in listed order')

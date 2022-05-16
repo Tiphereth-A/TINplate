@@ -80,7 +80,7 @@ def execute_if_file_exist(filepath: str, func, **kwargs):
         kwargs.get('logger').warning(f"{filepath} is inaccessible, skipped")
 
 
-def scandir_merge_flit(filter_func, *paths: str, **kwargs) -> list[str]:
+def scandir_merge_filter(filter_func, *paths: str, **kwargs) -> list[str]:
     result: list[os.DirEntry] = []
     for path in paths:
         _scandir = execute_if_file_exist(path, os.scandir)
@@ -92,12 +92,12 @@ def scandir_merge_flit(filter_func, *paths: str, **kwargs) -> list[str]:
 
 @withlog
 def scandir_file_merge(valid_ext_name: list[str], *paths: str, **kwargs) -> list[str]:
-    return scandir_merge_flit(lambda x: x.is_file() and x.name.partition('.')[-1] in valid_ext_name, *paths)
+    return scandir_merge_filter(lambda x: x.is_file() and x.name.partition('.')[-1] in valid_ext_name, *paths)
 
 
 @withlog
 def scandir_dir_merge(*paths: str, **kwargs) -> list[str]:
-    return scandir_merge_flit(lambda x: x.is_dir(), *paths)
+    return scandir_merge_filter(lambda x: x.is_dir(), *paths)
 
 
 def parse_filename(filename: str) -> tuple[str, str]:
