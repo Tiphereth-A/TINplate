@@ -68,7 +68,7 @@ notebook:
       #    ${section_key}: ${title}
       #    code_ext: ${extension_name_of_code}
       #    test_ext: ${extension_name_of_test_code}
-      # The relavent files should be in:
+      # The relevant files should be in:
       # - code: ${src_dir}/${notebook_code_dir}/${chapter_key}/${section_key}.${extension_name_of_code}
       # - documentation: ${src_dir}/${notebook_doc_dir}/${chapter_key}/${section_key}.tex
       # - test code: ${test_dir}/${chapter_key}/${section_key}.${extension_name_of_test_code}
@@ -80,7 +80,7 @@ notebook:
 # Cheatsheet config
 cheatsheets:
   # Should be formed in: ${cheatsheet_key}: ${title}
-  # The relavent files should be in: ${src_dir}/${cheatsheet_dir}/${cheatsheet_key}.tex
+  # The relevant files should be in: ${src_dir}/${cheatsheet_dir}/${cheatsheet_key}.tex
   example: Euler formula
   example2: A sequence
 
@@ -103,7 +103,7 @@ code_styles:
   HPP: cpp
   hxx: cpp
 
-# Reformatting command config, ${filename} is the name of file that will be reformetted
+# Reformatting command config, ${filename} is the name of file that will be reformatted
 formatting_commands:
   cpp:
     - clang-format
