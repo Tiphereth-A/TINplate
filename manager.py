@@ -63,14 +63,14 @@ def _gen_nbc():
     def generate_notebook_contents(logger: logging.Logger):
         with open(CONTENTS_NB, 'w', encoding='utf8') as f:
             f.write('%-*- coding: utf-8 -*-\n')
-            chapters = file_preprocess(CONFIG.get_chapters(),
+            chapters = file_preprocess(CONFIG.get_chapter_key(),
                                        scandir_dir_merge(CONFIG.get_code_dir(), CONFIG.get_doc_dir()), logger)
             logger.info(rf"{len(chapters)} chapter(s) found")
             logger.debug('Which are:\n\t' + '\n\t'.join(chapters))
             logger.debug('Will include in listed order')
 
             for chapter in chapters:
-                f.writelines(latex_chapter(NameLaTeX(CONFIG.get_chapter_name(chapter))))
+                f.writelines(latex_chapter(NameLaTeX(CONFIG.get_chapter_title(chapter))))
 
                 sections: list[Section] = CONFIG.get_sections_by_chapter(chapter)
                 logger.info(f"{len(sections)} section(s) found in config")

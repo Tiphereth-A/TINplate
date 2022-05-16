@@ -30,8 +30,14 @@ class Config:
     def _get_chapters_raw(self) -> dict[str, str]:
         return self._config['notebook']['chapters']
 
+    def _set_chapters_raw(self, chapters: dict[str, str]):
+        self._config['notebook']['chapters'] = chapters
+
     def _get_sections_raw(self) -> dict:
         return self._config['notebook']['sections']
+
+    def _set_sections_raw(self, sections: dict):
+        self._config['notebook']['sections'] = sections
 
     def _get_cheatsheet_raw(self) -> dict[str, str]:
         return self._config['cheatsheets']
@@ -94,11 +100,11 @@ class Config:
         return self._get_notebook_file_raw()
 
     @withlog
-    def get_chapters(self, **kwargs) -> list[str]:
+    def get_chapter_key(self, **kwargs) -> list[str]:
         return list(self._get_chapters_raw().keys())
 
     @withlog
-    def get_chapter_name(self, chapter: str, **kwargs) -> str:
+    def get_chapter_title(self, chapter: str, **kwargs) -> str:
         try:
             return self._get_chapters_raw()[chapter]
         except KeyError:
@@ -115,14 +121,37 @@ class Config:
         return result
 
     @withlog
+    def set_sections_by_chapter(self, chapter: str, sections: list[Section], **kwargs):
+        try:
+            self._get_sections_raw()[chapter]
+        except KeyError:
+            kwargs.get('logger').warning(f"chapter with key {chapter} is not found, try to generate one")
+            self.append_chapter(chapter)
+
+        self._get_sections_raw()[chapter] = [sec.get_dict() for sec in sections]
+
+    @withlog
+    def append_chapter(self, chapter: str, **kwargs):
+        for item in self.get_chapter_key():
+            if item == chapter:
+                raise KeyError(f"chapter with key '{item}' already exists")
+        _chapter: list[tuple[str, str]] = list(self._get_chapters_raw().items())
+        _chapter.append((chapter, chapter))
+        self._set_chapters_raw(dict(_chapter))
+
+        _sections: list[tuple[str, list]] = list(self._get_sections_raw().items())
+        _sections.append((chapter, []))
+        self._set_sections_raw(dict(_sections))
+        self.output()
+
+    @withlog
     def append_section(self, section: Section, **kwargs):
         _sections: list[Section] = self.get_sections_by_chapter(section.chapter)
         for item in _sections:
             if item.name == section.name:
-                raise KeyError(f"section with name '{section.name}' already exist")
+                raise KeyError(f"section with key '{section.name}' already exists")
         _sections.append(section)
-        _new_section_dict: list[dict] = [sec.get_dict() for sec in _sections]
-        self._get_sections_raw()[section.chapter] = _new_section_dict
+        self.set_sections_by_chapter(section.chapter, _sections)
         self.output()
 
     @withlog
