@@ -13,11 +13,10 @@ from libs.classes.alias_group import AliasGroup
 from libs.classes.section import Section
 from libs.consts import CONFIG, CLEAN_EXT_NAME, CONTENTS_CS, CONTENTS_NB
 from libs.decorator import withlog
-from libs.latex_utils import latex_input, latex_chapter, latex_section, \
-    latex_listing_code, PathLaTeX, NameLaTeX, LATEX_COMPILE_COMMAND_GROUP
+from libs.latex_utils import latex_input, latex_chapter, latex_section, latex_listing_code, PathLaTeX, NameLaTeX, \
+    LATEX_COMPILE_COMMAND_GROUP
 from libs.utils import get_full_filenames, file_preprocess, execute_if_file_exist, scandir_dir_merge, \
-    scandir_file_merge, \
-    parse_filename, unique
+    scandir_file_merge, parse_filename, unique
 
 
 @click.group(cls=AliasGroup)
