@@ -25,7 +25,7 @@ class Config:
         if not os.access(self.__conf_path, os.W_OK):
             raise PermissionError(f"{self.__conf_path} is inaccessible")
         with open(self.__conf_path, 'w', encoding='utf8') as f:
-            yaml.dump(self._config, f, sort_keys=False)
+            yaml.dump(self._config, f, sort_keys=False, allow_unicode=True)
 
     def _get_chapters_raw(self) -> dict[str, str]:
         return self._config['notebook']['chapters']
