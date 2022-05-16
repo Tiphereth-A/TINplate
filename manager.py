@@ -120,6 +120,7 @@ def _gen_nbc():
             kwargs.get('logger').debug('Which are:\n\t' + '\n\t'.join(filename_in_dir))
 
         _partitioned_filename: list[tuple[str, str]] = [parse_filename(filename) for filename in filename_in_dir]
+        _partitioned_filename = [item for item in _partitioned_filename if item[1] in CONFIG.get_all_code_types()]
         if len(set([k for k, v in _partitioned_filename])) != len(_partitioned_filename):
             kwargs.get('logger').error(f'File with duplicate name found in dir: {dir_name}')
             kwargs.get('logger').info(

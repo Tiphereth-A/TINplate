@@ -159,6 +159,10 @@ class Config:
         return set(self._get_code_styles_raw().values())
 
     @withlog
+    def get_all_code_types(self, **kwargs) -> set[str]:
+        return set(self._get_code_styles_raw().keys())
+
+    @withlog
     def get_ext_names_by_code_style(self, code_style: str, **kwargs) -> list[str]:
         return [k for k, v in self._get_code_styles_raw().items() if v == code_style]
 
