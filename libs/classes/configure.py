@@ -109,8 +109,9 @@ class Config:
     def get_sections_by_chapter(self, chapter: str, **kwargs) -> list[Section]:
         _result: list[dict] = self._get_sections_raw().get(chapter, [])
         result: list[Section] = []
-        for item in _result:
-            result.append(Section(chapter).parse_from_dict(item))
+        if _result:
+            for item in _result:
+                result.append(Section(chapter).parse_from_dict(item))
         return result
 
     @withlog
