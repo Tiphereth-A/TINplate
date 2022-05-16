@@ -1,6 +1,7 @@
 import logging
 import os
 import re
+from typing import Iterable
 
 from libs.consts import REGEX_ENDSWITH_MULTI_SLASH, REGEX_STARTSWITH_MULTI_SLASH
 from libs.decorator import withlog
@@ -91,7 +92,7 @@ def scandir_merge_filter(filter_func, *paths: str, **kwargs) -> list[str]:
 
 
 @withlog
-def scandir_file_merge(valid_ext_name: list[str], *paths: str, **kwargs) -> list[str]:
+def scandir_file_merge(valid_ext_name: Iterable[str], *paths: str, **kwargs) -> list[str]:
     return scandir_merge_filter(lambda x: x.is_file() and x.name.partition('.')[-1] in valid_ext_name, *paths)
 
 

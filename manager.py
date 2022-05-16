@@ -9,16 +9,18 @@ import subprocess
 import click
 import coloredlogs
 
+from libs.classes.alias_group import AliasGroup
 from libs.classes.section import Section
 from libs.consts import CONFIG, CLEAN_EXT_NAME, CONTENTS_CS, CONTENTS_NB
 from libs.decorator import withlog
 from libs.latex_utils import latex_input, latex_chapter, latex_section, \
     latex_listing_code, PathLaTeX, NameLaTeX, LATEX_COMPILE_COMMAND_GROUP
-from libs.utils import get_full_filenames, file_preprocess, execute_if_file_exist, scandir_dir_merge, scandir_file_merge, \
+from libs.utils import get_full_filenames, file_preprocess, execute_if_file_exist, scandir_dir_merge, \
+    scandir_file_merge, \
     parse_filename, unique
 
 
-@click.group()
+@click.group(cls=AliasGroup)
 @click.option('-l', '--level', type=click.Choice(['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG']), help='log level',
               default='INFO')
 def cli(level: str):
@@ -207,7 +209,7 @@ def _format(code_type: str):
     reformat_all_codes(code_type)
 
 
-@cli.command('new')
+@cli.command(['new-nb', 'new', 'add'])
 @click.option('-c', '--chapter-name', type=str, prompt='Chapter name', help='Chapter name (key)')
 @click.option('-f', '--file-name', type=str, prompt='File name (without ext name)', help='File name to be added')
 @click.option('-s', '--section-title', type=str, prompt='Section title', help='Section title in notebook')
