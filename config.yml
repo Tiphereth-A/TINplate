@@ -33,6 +33,7 @@ code_styles:
   hpp: cpp
   HPP: cpp
   hxx: cpp
+  tex: tex
 formatting_commands:
   cpp:
   - clang-format

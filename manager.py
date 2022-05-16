@@ -14,8 +14,8 @@ from libs.consts import CONFIG, CLEAN_EXT_NAME, CONTENTS_CS, CONTENTS_NB
 from libs.decorator import withlog
 from libs.latex_utils import latex_input, latex_chapter, latex_section, \
     latex_listing_code, PathLaTeX, NameLaTeX, LATEX_COMPILE_COMMAND_GROUP
-from libs.utils import get_full_filenames, file_preprocess, execute_if_file_exist, scandir_merge_flit, parse_filename, \
-    unique
+from libs.utils import get_full_filenames, file_preprocess, execute_if_file_exist, scandir_dir_merge, scandir_file_merge, \
+    parse_filename, unique
 
 
 @click.group()
@@ -64,9 +64,7 @@ def _gen_nbc():
         with open(CONTENTS_NB, 'w', encoding='utf8') as f:
             f.write('%-*- coding: utf-8 -*-\n')
             chapters = file_preprocess(CONFIG.get_chapters(),
-                                       scandir_merge_flit(lambda x: x.is_dir(), CONFIG.get_code_dir(),
-                                                          CONFIG.get_doc_dir()),
-                                       logger)
+                                       scandir_dir_merge(CONFIG.get_code_dir(), CONFIG.get_doc_dir()), logger)
             logger.info(rf"{len(chapters)} chapter(s) found")
             logger.debug('Which are:\n\t' + '\n\t'.join(chapters))
             logger.debug('Will include in listed order')
@@ -114,13 +112,12 @@ def _gen_nbc():
 
     @withlog
     def load_from(dir_name: str, **kwargs) -> list[tuple[str, str]]:
-        filename_in_dir: list[str] = scandir_merge_flit(lambda x: x.is_file(), dir_name)
+        filename_in_dir: list[str] = scandir_file_merge(CONFIG.get_all_code_types(), dir_name)
         kwargs.get('logger').info(rf"{len(filename_in_dir)} file(s) found")
         if len(filename_in_dir):
             kwargs.get('logger').debug('Which are:\n\t' + '\n\t'.join(filename_in_dir))
 
         _partitioned_filename: list[tuple[str, str]] = [parse_filename(filename) for filename in filename_in_dir]
-        _partitioned_filename = [item for item in _partitioned_filename if item[1] in CONFIG.get_all_code_types()]
         if len(set([k for k, v in _partitioned_filename])) != len(_partitioned_filename):
             kwargs.get('logger').error(f'File with duplicate name found in dir: {dir_name}')
             kwargs.get('logger').info(
