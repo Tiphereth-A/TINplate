@@ -511,5 +511,6 @@ TSWLatexianTemp*
 # Custom
 
 /_deprecated/
+_gen/
 
 *.pdf
