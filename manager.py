@@ -9,9 +9,8 @@ import subprocess
 import click
 import coloredlogs
 
-from libs.classes.alias_group import AliasConfig, AliasedGroup, pass_config
 from libs.classes.section import Section
-from libs.consts import ALIAS_CFG_PATH, CONFIG, CLEAN_EXT_NAME, CONTENTS_CS, CONTENTS_NB
+from libs.consts import CONFIG, CLEAN_EXT_NAME, CONTENTS_CS, CONTENTS_NB
 from libs.decorator import withlog
 from libs.latex_utils import latex_input, latex_chapter, latex_section, latex_listing_code, PathLaTeX, NameLaTeX, \
     LATEX_COMPILE_COMMAND_GROUP
@@ -19,26 +18,9 @@ from libs.utils import get_full_filenames, file_preprocess, execute_if_file_exis
     scandir_file_merge, parse_filename, unique
 
 
-def read_alias_config(ctx: click.Context, param, value):
-    """Callback that is used whenever --config is passed.  We use this to
-    always load the correct config.  This means that the config is loaded
-    even if the group itself never executes so our aliases stay always
-    available.
-    """
-    ctx.ensure_object(AliasConfig).read_config(ALIAS_CFG_PATH if value is None else value)
-    return value
-
-
-@click.group(cls=AliasedGroup)
+@click.group()
 @click.option('-l', '--level', type=click.Choice(['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG']), help='log level',
               default='INFO')
-@click.option(
-    "--config",
-    type=click.Path(exists=True, dir_okay=False),
-    callback=read_alias_config,
-    expose_value=False,
-    help="The config file to use instead of the default.",
-)
 def cli(level: str):
     coloredlogs.install(level=level,
                         fmt='%(asctime)s %(levelname)s %(programname)s::%(name)s [%(process)d] %(message)s',
@@ -58,22 +40,6 @@ def cli(level: str):
                                       'success': {'bold': True, 'color': 'green'},
                                       'verbose': {'color': 'blue'},
                                       'warning': {'bright': True, 'color': 'yellow'}})
-
-
-@cli.command('alias')
-@pass_config
-@click.argument("alias_", metavar="ALIAS", type=str)
-@click.argument("cmd", type=str)
-@click.option("--config_file", type=click.Path(exists=True, dir_okay=False), default=ALIAS_CFG_PATH)
-def _alias(config: AliasConfig, alias_: str, cmd: str, config_file: str):
-    """Adds an alias to the specified configuration file."""
-
-    @withlog
-    def alias(_config: AliasConfig, _alias: str, _cmd: str, _config_file: str, **kwargs):
-        _config.add_alias(_alias, _cmd).write_config(_config_file)
-        kwargs.get('logger').info(f"Added '{_alias}' as alias for '{_cmd}'")
-
-    alias(config, alias_, cmd, config_file)
 
 
 @cli.command('clean')
@@ -242,7 +208,6 @@ def _format(code_type: str):
 
 
 @cli.command('new')
-@pass_config
 @click.option('-c', '--chapter-name', type=str, prompt='Chapter name', help='Chapter name (key)')
 @click.option('-f', '--file-name', type=str, prompt='File name (without ext name)', help='File name to be added')
 @click.option('-s', '--section-title', type=str, prompt='Section title', help='Section title in notebook')
