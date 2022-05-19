@@ -69,9 +69,9 @@ def _alias(config: AliasConfig, alias_: str, cmd: str, config_file: str):
     """Adds an alias to the specified configuration file."""
 
     @withlog
-    def alias(config: AliasConfig, alias_: str, cmd: str, config_file: str, **kwargs):
-        config.add_alias(alias_, cmd).write_config(config_file)
-        kwargs.get('logger').info(f"Added '{alias_}' as alias for '{cmd}'")
+    def alias(_config: AliasConfig, _alias: str, _cmd: str, _config_file: str, **kwargs):
+        _config.add_alias(_alias, _cmd).write_config(_config_file)
+        kwargs.get('logger').info(f"Added '{_alias}' as alias for '{_cmd}'")
 
     alias(config, alias_, cmd, config_file)
 
@@ -260,15 +260,15 @@ def _new_note(chapter_name: str, file_name: str, section_title: str, code_ext_na
         section: Section = Section(_chapter_name, _file_name, _section_title, _code_ext_name, _test_ext_name)
 
         section.open(CONFIG.get_code_dir(), CONFIG.get_doc_dir(), CONFIG.get_test_dir(), 'x')
-        logging.info('Created')
+        kwargs.get('logger').info('Created')
 
         _code, _doc, _test = section.get_filenames(CONFIG.get_code_dir(), CONFIG.get_doc_dir(), CONFIG.get_test_dir())
-        logging.info(f"Code: {os.path.join(os.curdir, _code)}")
-        logging.info(f"Doc: {os.path.join(os.curdir, _doc)}")
-        logging.info(f"Test: {os.path.join(os.curdir, _test)}")
+        kwargs.get('logger').info(f"Code: {os.path.join(os.curdir, _code)}")
+        kwargs.get('logger').info(f"Doc: {os.path.join(os.curdir, _doc)}")
+        kwargs.get('logger').info(f"Test: {os.path.join(os.curdir, _test)}")
 
         CONFIG.append_section(section)
-        logging.info('Config updated')
+        kwargs.get('logger').info('Config updated')
 
     add_new_note(chapter_name, file_name, section_title, code_ext_name, test_ext_name)
 

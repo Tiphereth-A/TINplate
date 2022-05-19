@@ -118,6 +118,8 @@ class Config:
         if _result:
             for item in _result:
                 result.append(Section(chapter).parse_from_dict(item))
+        else:
+            kwargs.get('logger').warning(f"No section config found with chapter key '{chapter}'")
         return result
 
     @withlog
@@ -134,7 +136,8 @@ class Config:
     def append_chapter(self, chapter: str, **kwargs):
         for item in self.get_chapter_key():
             if item == chapter:
-                raise KeyError(f"chapter with key '{item}' already exists")
+                kwargs.get('logger').waining(f"chapter with key '{item}' already exists, skipped")
+                return
         self._get_chapters_raw().update({chapter: chapter})
         self._get_sections_raw().update({chapter: []})
         self.output()
@@ -144,7 +147,8 @@ class Config:
         _sections: list[Section] = self.get_sections_by_chapter(section.chapter)
         for item in _sections:
             if item.name == section.name:
-                raise KeyError(f"section with key '{section.name}' already exists")
+                kwargs.get('logger').waining(f"section with key '{section.name}' already exists, skipped")
+                return
         _sections.append(section)
         self.set_sections_by_chapter(section.chapter, _sections)
         self.output()

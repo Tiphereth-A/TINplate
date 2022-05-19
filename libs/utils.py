@@ -65,6 +65,7 @@ def execute_if_file_exist(filepath: str, func, **kwargs):
         kwargs.get('logger').warning(f"{filepath} is inaccessible, skipped")
 
 
+@withlog
 def scandir_merge_filter(filter_func, *paths: str, **kwargs) -> list[str]:
     result: list[os.DirEntry] = []
     for path in paths:
@@ -85,7 +86,8 @@ def scandir_dir_merge(*paths: str, **kwargs) -> list[str]:
     return scandir_merge_filter(lambda x: x.is_dir(), *paths)
 
 
-def parse_filename(filename: str) -> tuple[str, str]:
+@withlog
+def parse_filename(filename: str, **kwargs) -> tuple[str, str]:
     """return [filename without ext, ext name]"""
 
     _ = filename.partition('.')
