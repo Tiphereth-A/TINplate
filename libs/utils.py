@@ -1,9 +1,7 @@
 import logging
 import os
-import re
 from typing import Iterable
 
-from libs.consts import REGEX_ENDSWITH_MULTI_SLASH, REGEX_STARTSWITH_MULTI_SLASH
 from libs.decorator import withlog
 
 
@@ -25,20 +23,6 @@ def unique(seq: list, hash_func=lambda x: x) -> list:
             continue
         visited[marker] = 1
         result.append(item)
-    return result
-
-
-def get_redundant(seq: list, hash_func=lambda x: x) -> dict[int, any]:
-    visited: dict = {}
-    result: dict[int, any] = {}
-    now_index: int = -1
-    for item in seq:
-        now_index += 1
-        marker = hash_func(item)
-        if marker in visited:
-            result[now_index] = item
-            continue
-        visited[marker] = 1
     return result
 
 
@@ -106,17 +90,3 @@ def parse_filename(filename: str) -> tuple[str, str]:
 
     _ = filename.partition('.')
     return _[0], _[-1]
-
-
-@withlog
-def remove_slash_in_ends(s: str, **kwargs) -> str:
-    result = s
-    re.sub(REGEX_ENDSWITH_MULTI_SLASH, '', result)
-    return result
-
-
-@withlog
-def remove_slash_in_starts(s: str, **kwargs) -> str:
-    result = s
-    re.sub(REGEX_STARTSWITH_MULTI_SLASH, '', result)
-    return result

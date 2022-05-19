@@ -36,14 +36,8 @@ class Config:
     def _get_chapters_raw(self) -> dict[str, str]:
         return self.items('notebook', 'chapters')
 
-    def _set_chapters_raw(self, chapters: dict[str, str]):
-        self._config['notebook']['chapters'] = chapters
-
     def _get_sections_raw(self) -> dict:
         return self.items('notebook', 'sections')
-
-    def _set_sections_raw(self, sections: dict):
-        self._config['notebook']['sections'] = sections
 
     def _get_cheatsheet_raw(self) -> dict[str, str]:
         return self.items('cheatsheets')
@@ -131,7 +125,7 @@ class Config:
         try:
             self._get_sections_raw()[chapter]
         except KeyError:
-            kwargs.get('logger').warning(f"chapter with key {chapter} is not found, try to generate one")
+            kwargs.get('logger').warning(f"chapter with key '{chapter}' is not found, try to generate one")
             self.append_chapter(chapter)
 
         self._get_sections_raw()[chapter] = [sec.get_dict() for sec in sections]
@@ -141,13 +135,8 @@ class Config:
         for item in self.get_chapter_key():
             if item == chapter:
                 raise KeyError(f"chapter with key '{item}' already exists")
-        _chapter: list[tuple[str, str]] = list(self._get_chapters_raw().items())
-        _chapter.append((chapter, chapter))
-        self._set_chapters_raw(dict(_chapter))
-
-        _sections: list[tuple[str, list]] = list(self._get_sections_raw().items())
-        _sections.append((chapter, []))
-        self._set_sections_raw(dict(_sections))
+        self._get_chapters_raw().update({chapter: chapter})
+        self._get_sections_raw().update({chapter: []})
         self.output()
 
     @withlog
@@ -209,5 +198,5 @@ class Config:
             return result
         except KeyError:
             kwargs.get('logger').warning(
-                rf"formatting command of code style {code_style} is not found, return empty command")
+                rf"formatting command of code style '{code_style}' is not found, return empty command")
             return []
