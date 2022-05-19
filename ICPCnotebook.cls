@@ -34,6 +34,7 @@
     numberstyle=\ttfamily\small,
     stepnumber=1,
     basicstyle=\ttfamily\small,
+    frame=single
 }
 \lstdefinestyle{cpp}{
     style=common,
