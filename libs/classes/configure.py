@@ -27,53 +27,59 @@ class Config:
         with open(self.__conf_path, 'w', encoding='utf8') as f:
             yaml.dump(self._config, f, sort_keys=False, allow_unicode=True)
 
+    def items(self, *args: str):
+        result = self._config
+        for arg in args:
+            result = result[arg]
+        return result
+
     def _get_chapters_raw(self) -> dict[str, str]:
-        return self._config['notebook']['chapters']
+        return self.items('notebook', 'chapters')
 
     def _set_chapters_raw(self, chapters: dict[str, str]):
         self._config['notebook']['chapters'] = chapters
 
     def _get_sections_raw(self) -> dict:
-        return self._config['notebook']['sections']
+        return self.items('notebook', 'sections')
 
     def _set_sections_raw(self, sections: dict):
         self._config['notebook']['sections'] = sections
 
     def _get_cheatsheet_raw(self) -> dict[str, str]:
-        return self._config['cheatsheets']
+        return self.items('cheatsheets')
 
     def _get_src_dir_raw(self) -> str:
-        return self._config['src_dir']
+        return self.items('src_dir')
 
     def _get_code_dir_raw(self) -> str:
-        return self._config['notebook_code_dir']
+        return self.items('notebook_code_dir')
 
     def _get_doc_dir_raw(self) -> str:
-        return self._config['notebook_doc_dir']
+        return self.items('notebook_doc_dir')
 
     def _get_cheatsheet_dir_raw(self) -> str:
-        return self._config['cheatsheet_dir']
+        return self.items('cheatsheet_dir')
 
     def _get_test_dir_raw(self) -> str:
-        return self._config['test_dir']
+        return self.items('test_dir')
 
     def _get_notebook_file_raw(self) -> str:
-        return self._config['notebook_file']
+        return self.items('notebook_file')
 
     def _get_enable_test_raw(self) -> bool:
-        return self._config['enable_test']
+        return self.items('enable_test')
 
     def _get_generate_test_in_notebook_raw(self) -> bool:
-        return self._config['generate_test_in_notebook']
+        return self.items('generate_test_in_notebook')
 
     def _get_default_code_style_raw(self) -> str:
-        return self._config['default_code_style']
+        return self.items('default_code_style')
 
     def _get_code_styles_raw(self) -> dict[str, str]:
-        return self._config['code_styles']
+        return self.items('code_styles')
 
     def _get_formatting_commands_raw(self) -> dict[str, list[str]]:
-        return self._config['formatting_commands']
+        return self.items('formatting_commands')
 
     @withlog
     def get_src_dir(self, **kwargs) -> str:
