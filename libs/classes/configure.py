@@ -93,7 +93,7 @@ class Config:
 
     @withlog
     def get_test_dir(self, **kwargs) -> str:
-        return self._get_test_dir_raw()
+        return os.path.join(self.get_src_dir(), self._get_test_dir_raw()) 
 
     @withlog
     def get_notebook_file(self, **kwargs) -> str:
