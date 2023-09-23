@@ -512,5 +512,6 @@ TSWLatexianTemp*
 
 /_deprecated/
 _gen/
+_pdf_out/
 
 *.pdf
