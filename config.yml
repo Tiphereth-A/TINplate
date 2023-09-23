@@ -5,7 +5,7 @@ cheatsheet_dir: cheatsheet
 test_dir: test
 notebook_file: notebook
 enable_test: false
-generate_test_in_notebook: false
+generate_test_in_notebook: true
 notebook:
   chapters:
     example: Example

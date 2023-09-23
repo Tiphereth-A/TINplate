@@ -172,7 +172,7 @@ class Config:
 
     @withlog
     def generate_test_in_notebook(self, **kwargs) -> bool:
-        return self.enable_test() and self._get_generate_test_in_notebook_raw()
+        return self._get_generate_test_in_notebook_raw()
 
     @withlog
     def get_default_code_style(self, **kwargs) -> str:
