@@ -1,0 +1,46 @@
+name: Build & Relase LaTeX document
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Generate TeX files
+        run: |
+          pip install -r requirements.txt
+          python manager.py -l DEBUG gen-cs
+          python manager.py -l DEBUG gen-nb
+      - name: Build the LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          latexmk_use_xelatex: true
+          latexmk_shell_escape: true
+          args: "-pdf -file-line-error -halt-on-error -interaction=nonstopmode -8bit"
+          pre_compile: |
+            wget -q -O fira.zip "https://github.com/mozilla/Fira/archive/refs/tags/4.106.zip"
+            wget -q -O firacode.zip "https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip"
+            unzip -q firacode.zip -d firacode
+            unzip -q fira.zip -d fira
+            for i in woff2 ttf; do cp -r firacode/$i /usr/share/fonts/$i; done
+            for i in woff2 ttf; do cp -r fira/Fira-4.106/$i /usr/share/fonts/$i; done
+            fc-cache -f
+          root_file: notebook.tex
+      - name: Create Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ github.token }}
+          file: "*.pdf"
+          tag: ${{ github.ref }}
+          file_glob: true
+          overwrite: true
