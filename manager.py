@@ -48,7 +48,7 @@ def _clean():
 
     @withlog
     def clean(logger: logging.Logger):
-        for fullFilename in get_full_filenames(['.'], CLEAN_EXT_NAME):
+        for fullFilename in get_full_filenames(['_pdf_out'], CLEAN_EXT_NAME):
             os.remove(fullFilename)
             logger.info(rf"{fullFilename} removed successfully")
 
