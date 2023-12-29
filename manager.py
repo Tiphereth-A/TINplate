@@ -199,11 +199,15 @@ def _format(code_type: str):
 
     @withlog
     def reformat_all_codes(_code_type: str, **kwargs):
-        filepaths: list[str] = get_full_filenames([CONFIG.get_code_dir(), CONFIG.get_test_dir()],
+        filepaths: list[str] = get_full_filenames([CONFIG.get_code_dir(),
+                                                   CONFIG.get_doc_dir(),
+                                                   CONFIG.get_cheatsheet_dir(),
+                                                   CONFIG.get_test_dir()],
                                                   CONFIG.get_ext_names_by_code_style(_code_type))
         kwargs.get('logger').info(f"{len(filepaths)} file(s) found")
         for filepath in filepaths:
-            cmd: list[str] = CONFIG.get_formatting_command(_code_type, filepath)
+            cmd: list[str] = CONFIG.get_formatting_command(
+                _code_type, filepath)
             subprocess.run(cmd, encoding='utf8', check=True)
 
         kwargs.get('logger').info('finished')
