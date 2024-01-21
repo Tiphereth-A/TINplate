@@ -164,24 +164,34 @@ def _gen_csc():
 
 @cli.command('test')
 @click.option('-t', '--code-type', help='Code type, default: cpp', default='cpp')
-def _test(code_type: str):
+@click.option('-l', '--thlimit', type=int, default=8, help='Thread number limit, default 8')
+def _test(code_type: str, thlimit: int):
     """Run test codes"""
 
     @withlog
-    def run_test_codes(_code_type: str, **kwargs):
-        filepaths: list[str] = list(filter(lambda x: os.path.getsize(x), get_full_filenames(
+    def run_test_codes(_code_type: str, _thlimit: int, **kwargs):
+        all_files: list[str] = list(filter(lambda x: os.path.getsize(x), get_full_filenames(
             [CONFIG.get_test_dir()], CONFIG.get_ext_names_by_code_style(_code_type))))
 
-        kwargs.get('logger').info(f'{len(filepaths)} file(s) found')
+        kwargs.get('logger').info(f'{len(all_files)} file(s) found')
 
-        for filepath in filepaths:
-            kwargs.get('logger').debug(f'Compiling {filepath}')
-            cmd: list[str] = CONFIG.get_test_command(_code_type, filepath)
-            subprocess.run(cmd, encoding='utf8', check=True)
+        def single_process(filepaths: str, id: int):
+            for filepath in filepaths:
+                kwargs.get('logger').debug(
+                    f'Thread #{id}: Compiling {filepath}')
+                cmd: list[str] = CONFIG.get_test_command(_code_type, filepath)
+                subprocess.run(cmd, encoding='utf8', check=True)
+
+        thread_all: list[Thread] = [Thread(target=single_process, args=(
+            all_files[x::_thlimit], x), name=str(x)) for x in range(_thlimit)]
+        for th in thread_all:
+            th.start()
+        for th in thread_all:
+            th.join()
 
         kwargs.get('logger').info('Finished')
 
-    run_test_codes(code_type)
+    run_test_codes(code_type, thlimit)
 
 
 @cli.command('run')
@@ -209,7 +219,7 @@ def _compile(no_fmt: bool, no_test: bool, no_gen: bool, no_clean: bool):
 
     if not no_test:
         for code_style in CONFIG.get_all_code_styles():
-            _test.callback(code_style)
+            _test.callback(code_style, 8)
 
     if not no_gen:
         _gen_nbc.callback()
