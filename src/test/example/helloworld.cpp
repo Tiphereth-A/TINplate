@@ -1,7 +1,4 @@
-#include <iostream>
-#include <string>
-
-#include "example/helloworld.hpp"
+#include "../../code/example/helloworld.hpp"
 
 int main() {
   std::string s;

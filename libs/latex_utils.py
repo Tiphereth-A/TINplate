@@ -45,8 +45,7 @@ def bibtex(file: str, **kwargs) -> list:
 
 @withlog
 def latexmk(file: str, **kwargs) -> list:
-    return ['latexmk', '-cd', '-xelatex', '-file-line-error', '-halt-on-error', '-interaction=nonstopmode',
-            '-synctex=1', '-outdir=_pdf_out', '-time', file + '.tex']
+    return ['latexmk', '-cd', '-xelatex', '-file-line-error', '-halt-on-error', '-interaction=nonstopmode', '-shell-escape', '-synctex=1', '-outdir=_pdf_out', '-time', file + '.tex']
 
 
 LATEX_COMPILE_COMMAND_GROUP: list = [latexmk]
@@ -63,8 +62,7 @@ def __latex_command_with_option_(command: str, option: str, *args) -> str:
 
 @withlog
 def latex_input(path: PathLaTeX, **kwargs) -> list[str]:
-    return [__latex_command_('input', path.get()),
-            '\n']
+    return [__latex_command_('input', path.get()), '\n']
 
 
 @withlog
@@ -84,9 +82,9 @@ def latex_section(name: NameLaTeX, **kwargs) -> list[str]:
 
 @withlog
 def latex_listing_code(path: PathLaTeX, code_style: str, **kwargs) -> list[str]:
-    return [__latex_command_('vspace', '0.3cm'),
-            __latex_command_('lstset', f"style={code_style}"),
-            __latex_command_with_option_('lstinputlisting', f"label={{lst:{path.get_label_name()}}}",
-                                         path.get()),
-            __latex_command_('vspace', '0.3cm'),
-            '\n']
+    return [rf'Path: \verb|{path.get()}|', '\n\n', __latex_command_('inputminted', code_style, path.get()), '\n']
+
+
+@withlog
+def latex_listing_code_range(path: PathLaTeX, code_style: str, begin: int, end: int, **kwargs) -> list[str]:
+    return [rf'Path: \verb|{path.get()}|', '\n\n', __latex_command_with_option_('inputminted', rf'firstline={begin},lastline={end}', code_style, path.get()), '\n']

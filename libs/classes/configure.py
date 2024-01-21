@@ -60,17 +60,17 @@ class Config:
     def _get_notebook_file_raw(self) -> str:
         return self.items('notebook_file')
 
-    def _get_enable_test_raw(self) -> bool:
-        return self.items('enable_test')
-
-    def _get_generate_test_in_notebook_raw(self) -> bool:
-        return self.items('generate_test_in_notebook')
+    def _get_export_testcode_in_notebook_raw(self) -> bool:
+        return self.items('export_testcode_in_notebook')
 
     def _get_default_code_style_raw(self) -> str:
         return self.items('default_code_style')
 
     def _get_code_styles_raw(self) -> dict[str, str]:
         return self.items('code_styles')
+
+    def _get_test_commands_raw(self) -> dict[str, list[str]]:
+        return self.items('test_commands')
 
     def _get_formatting_commands_raw(self) -> dict[str, list[str]]:
         return self.items('formatting_commands')
@@ -93,7 +93,7 @@ class Config:
 
     @withlog
     def get_test_dir(self, **kwargs) -> str:
-        return os.path.join(self.get_src_dir(), self._get_test_dir_raw()) 
+        return os.path.join(self.get_src_dir(), self._get_test_dir_raw())
 
     @withlog
     def get_notebook_file(self, **kwargs) -> str:
@@ -108,7 +108,8 @@ class Config:
         try:
             return self._get_chapters_raw()[chapter]
         except KeyError:
-            kwargs.get('logger').warning(rf"title name of chapter '{chapter}' is not found, use '{chapter}' instead")
+            kwargs.get('logger').warning(
+                rf"title name of chapter '{chapter}' is not found, use '{chapter}' instead")
             return chapter
 
     @withlog
@@ -119,7 +120,8 @@ class Config:
             for item in _result:
                 result.append(Section(chapter).parse_from_dict(item))
         else:
-            kwargs.get('logger').warning(f"No section config found with chapter key '{chapter}'")
+            kwargs.get('logger').warning(
+                f"No section config found with chapter key '{chapter}'")
         return result
 
     @withlog
@@ -127,16 +129,19 @@ class Config:
         try:
             self._get_sections_raw()[chapter]
         except KeyError:
-            kwargs.get('logger').warning(f"chapter with key '{chapter}' is not found, try to generate one")
+            kwargs.get('logger').warning(
+                f"chapter with key '{chapter}' is not found, try to generate one")
             self.append_chapter(chapter)
 
-        self._get_sections_raw()[chapter] = [sec.get_dict() for sec in sections]
+        self._get_sections_raw()[chapter] = [sec.get_dict()
+                                             for sec in sections]
 
     @withlog
     def append_chapter(self, chapter: str, **kwargs):
         for item in self.get_chapter_key():
             if item == chapter:
-                kwargs.get('logger').waining(f"chapter with key '{item}' already exists, skipped")
+                kwargs.get('logger').waining(
+                    f"chapter with key '{item}' already exists, skipped")
                 return
         self._get_chapters_raw().update({chapter: chapter})
         self._get_sections_raw().update({chapter: []})
@@ -144,10 +149,12 @@ class Config:
 
     @withlog
     def append_section(self, section: Section, **kwargs):
-        _sections: list[Section] = self.get_sections_by_chapter(section.chapter)
+        _sections: list[Section] = self.get_sections_by_chapter(
+            section.chapter)
         for item in _sections:
             if item.name == section.name:
-                kwargs.get('logger').waining(f"section with key '{section.name}' already exists, skipped")
+                kwargs.get('logger').waining(
+                    f"section with key '{section.name}' already exists, skipped")
                 return
         _sections.append(section)
         self.set_sections_by_chapter(section.chapter, _sections)
@@ -167,12 +174,8 @@ class Config:
             return cheatsheet
 
     @withlog
-    def enable_test(self, **kwargs) -> bool:
-        return self._get_enable_test_raw()
-
-    @withlog
-    def generate_test_in_notebook(self, **kwargs) -> bool:
-        return self._get_generate_test_in_notebook_raw()
+    def export_testcode_in_notebook(self, **kwargs) -> bool:
+        return self._get_export_testcode_in_notebook_raw()
 
     @withlog
     def get_default_code_style(self, **kwargs) -> str:
@@ -195,10 +198,23 @@ class Config:
         return [k for k, v in self._get_code_styles_raw().items() if v == code_style]
 
     @withlog
+    def get_test_command(self, code_style: str, filepath: str, **kwargs) -> list[str]:
+        try:
+            result: list[str] = self._get_test_commands_raw()[code_style]
+            result = [filepath if item ==
+                      '${filename}' else item for item in result]
+            return result
+        except KeyError:
+            kwargs.get('logger').warning(
+                rf"test command of code style '{code_style}' is not found, return empty command")
+            return []
+
+    @withlog
     def get_formatting_command(self, code_style: str, filepath: str, **kwargs) -> list[str]:
         try:
             result: list[str] = self._get_formatting_commands_raw()[code_style]
-            result = [filepath if item == '${filename}' else item for item in result]
+            result = [filepath if item ==
+                      '${filename}' else item for item in result]
             return result
         except KeyError:
             kwargs.get('logger').warning(

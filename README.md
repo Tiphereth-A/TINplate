@@ -50,11 +50,8 @@ test_dir: test
 # The name of the file that will be compiled
 notebook_file: notebook
 
-# Run all test code before compiling if `true`
-enable_test: false
-
 # Listing all test code before compiling if `true`
-generate_test_in_notebook: true
+export_testcode_in_notebook: true
 
 # Notebook config
 notebook:
@@ -93,7 +90,7 @@ cheatsheets:
   example: Euler formula
   example2: A sequence
 
-# Code style config, will be used in reformatting and compiling PDF
+# Code style config, will be used in linting and compiling PDF
 default_code_style: common
 code_styles:
   # Should be formed in: ${extension_name}: ${code_style_name}
@@ -112,7 +109,13 @@ code_styles:
   HPP: cpp
   hxx: cpp
 
-# Reformatting command config, ${filename} is the name of file that will be reformatted
+# Compiling test code command config, ${filename} is the name of file that will be compiled
+test_commands:
+  cpp:
+  - g++
+  - ${filename}
+
+# Linting command config, ${filename} is the name of file that will be linted
 formatting_commands:
   cpp:
     - clang-format

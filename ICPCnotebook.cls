@@ -70,35 +70,20 @@
 
 
 % Code style
-\RequirePackage{listings}
-\RequirePackage{lstfiracode}
-\lstdefinestyle{common}{
-    style=FiraCodeStyle,
-    belowcaptionskip=1\baselineskip,
-    breaklines=true,
-    xleftmargin=\parindent,
-    showstringspaces=true,
-    numbers=left,
-    numberstyle=\ttfamily\small,
-    basicstyle=\ttfamily,
-    stepnumber=1,
-    frame=single
-}
+\RequirePackage{minted}
 
-\lstdefinestyle{cpp}{
-    style=common,
-    language=C++,
-    keywordstyle=\bfseries\color{green!40!black},
-    commentstyle=\itshape\color{red!80!black},
-    identifierstyle=\color{blue},
-    stringstyle=\color{purple!40!black},
-}
-
-\lstdefinestyle{c}{
-    style=common,
-    language=C,
-    keywordstyle=\bfseries\color{green!40!black},
-    commentstyle=\itshape\color{red!80!black},
-    identifierstyle=\color{blue},
-    stringstyle=\color{purple!40!black},
+\setminted{
+	style=default,
+	mathescape,
+	linenos,
+	autogobble,
+	breakanywhere,
+	baselinestretch=0.9,
+	tabsize=2,
+	fontsize=\normalsize,
+	frame=single,
+	framesep=0.8mm,
+	framerule=0.3pt,
+	numbersep=0.8mm,
+	breaklines=true,
 }
