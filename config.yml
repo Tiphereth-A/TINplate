@@ -37,7 +37,6 @@ test_commands:
   cpp:
   - g++
   - ${filename}
-  tex:
 formatting_commands:
   cpp:
   - clang-format
