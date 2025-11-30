@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Please using <https://github.com/Tiphereth-A/CP-lib> directly instead of this repo since lacking of maintenance.
+
 # TINplate
 
 ![GitHub](https://img.shields.io/github/license/Tiphereth-A/TINplate?style=flat-square)
